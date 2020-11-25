@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <!-- <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.structure.css">
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.theme.css"> 
+    <script src="/cures/js/jquery.js"></script>
+    <script src="/cures/jquery-ui/jquery-ui.js"></script>
+ -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="keywords" content="">
+      <link rel="icon" type="image/png" sizes="32x32" href="img/images/fav.png">
+
+      <title>Home page</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+      <!-- font-awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://kit.fontawesome.com/c9238e9905.js" crossorigin="anonymous"></script>
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+      <!-- Icomoon font -->
+      <link rel="stylesheet" href="icomoon/style.css">
+      <!--- Goole font --->
+      <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800">
+
+      <!-- Main css -->
+      <link rel="stylesheet" href="css/main.css">
+
+      <!-- owl carousel css -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous" />
+      <!-- <link rel="stylesheet" href="css/owl.carousel.css"> -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" />
+      <!-- <link rel="stylesheet" href="css/owl.theme.css"> -->
+      
+      <!-- Animation css -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.css" integrity="sha512-phGxLIsvHFArdI7IyLjv14dchvbVkEDaH95efvAae/y2exeWBQCQDpNFbOTdV1p4/pIa/XtbuDCnfhDEIXhvGQ==" crossorigin="anonymous" />
+      <!-- <link rel="stylesheet" type="text/css" href="css/animate.css"> -->
+
+      <!-- Responsive css -->
+
+      <link rel="stylesheet" href="css/responsive.css">
+    <script src="jquery-ui-1.12.1/external/jquery/jquery.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">
+ 
+    <script>
+        $(function() {
+        function log( message ) {
+            $( "<div>" ).text( message ).prependTo( "#log" );
+            $( "#log" ).scrollTop( 0 );
+        }
+    
+        $( "#city" ).autocomplete({
+          //  source: ["Mumbai","New Delhi", "Panjim", "Pune","Mysore","New York"],
+            //Uncomment the block Below to use Backend Call; Comment the line above at the same time OR Vice-Versa
+            
+            source: function( request, response ) {
+            	
+            $.ajax(
+                {
+                	
+                    url: "/cures/CityActionController",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function( data ) {
+                    	
+                    	//alert("data"+data);
+                    	// Anu Code
+                    	var json = JSON.parse(JSON.stringify(data));
+                       console.log("success", json);
+                       var city=(json.map.Cityname+','+json.map.Pincode);
+                      var cityStr=city.replace(/[`~!@#$%^&*()_|+\-=÷¿?;:.<>\{\}\[\]\\\/]/gi, '');
+                      var arrcity= cityStr.split(',');
+                      var results = $.ui.autocomplete.filter(arrcity, request.term);                      
+                      response(results.slice(0, 10));
+                                           //Anu End
+                       // response( arrcity );
+                       // alert("hello");
+                       // console.log("received data from backend:"+data);
+                    }
+                }
+                );
+            },
+            minLength: 1,
+            autoFocus:true,
+            select: function( event, ui ) {
+            log( ui.item ?
+                "Selected: " + ui.item.label :
+                "Nothing selected, input was " + this.value);
+            },
+            open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            },
+            close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+            }
+        });
+        });
+    </script>
+    <script>
+        $(function() {
+        function log( message ) {
+            $( "<div>" ).text( message ).prependTo( "#log" );
+            $( "#log" ).scrollTop( 0 );
+        }
+    
+        $( "#doctors" ).autocomplete({
+          //  source: ["Mumbai","New Delhi", "Panjim", "Pune","Mysore","New York"],
+            //Uncomment the block Below to use Backend Call; Comment the line above at the same time OR Vice-Versa
+            
+            source: function( request, response ) {
+            	
+            $.ajax(
+                {
+                	
+                    url: "/cures/IntegratedActionController",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function( data ) {
+                    	
+                    	 var json = JSON.parse(JSON.stringify(data));
+                           console.log("success", json);
+                         
+                           var city=(json.map.Doctorname.myArrayList+','+json.map.Specialties.myArrayList+','+json.map.SubSpecialties.myArrayList);
+                          var cityStr=city.replace(/[`~!@#$%^&*()_|+\-=÷¿?;:.<>\{\}\[\]\\\/]/gi, '');
+                          var arrcity= cityStr.split(',');
+                          var results = $.ui.autocomplete.filter(arrcity, request.term);                      
+                          response(results.slice(0, 10));
+                           // response(arrcity);
+                       
+                    }
+                }
+                );
+            },
+            minLength: 1,
+            autoFocus:true,
+            select: function( event, ui ) {
+            log( ui.item ?
+                "Selected: " + ui.item.label :
+               "Nothing selected, input was " + this.value);
+                //log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            },
+            open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            },
+            close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+            }
+        });
+        });
+    </script>
+    
+</head>
+
+<body>
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <section class="banner">
+         <div class="container">
+            <div class="banner-inner clearfix">
+               <div class="row">
+                  <div class="header">
+                     <div class="logo">
+                        <a href="javascript:void(0)">
+                           <img src="img/images/heart.png"><span>Digi Healthcare</span></a>
+                     </div>
+                     <div class="loginSign">
+                        <a href="javascript:void(0)" class="btn-bg loginSignbtn color-white">Log in / Sign up</a>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="serchlabel">
+                     <h1>Find Doctors <br>near by your location</h1>
+                  </div>
+               </div>      
+            </div>
+         </div>
+      </section>
+      <section class="megaSearch">
+         <div class="container">
+            <div class="row">
+               <div class="serch-wrap-inner clearfix">
+                  <div class="col-md-4 pd-0 col-sx-12 col-sm-4">
+                     <div class="form-group search">
+
+                        <div class="ui-widget">
+                           <input id="doctors" class="form-control" placeholder="Search by Doctor Name, Disease, Condition">
+                                </div>
+
+                        <!-- <input type="text" name="" placeholder="Search by Doctor Name, Disease, Condition" class="form-control">
+                        <span class="icon-loupe"></span> -->
+                     </div>
+                  </div>
+                  <div class="col-md-4 pd-0 col-sx-12 col-sm-4">
+                     <div class=" form-group zipcode">
+                             <div class="ui-widget">
+        				 <input id="city" class="form-control" placeholder="City or Zip-code">
+       						 </div>
+                     </div>
+                  </div>
+                  <div class="col-md-4 pd-0 col-sx-12 col-sm-4">
+                     <div class="form-group date">
+                        <input type="date" name="" placeholder="" class="form-control">
+                        <a href="javascript:void(0)" class="btn-bg searchBtn"> Search </a>
+                     </div>
+                  </div>
+               </div>   
+            </div>
+         </div>
+      </section>
+      <section class="tabslider clerfix">
+          <div class="container">
+            <div class="row">
+                <div class="tab-nav">
+                  <div class="comman-heading">
+                     <h2>Choose by Category</h2>
+                  </div>
+                  <!-- Nav tabs -->
+                  <ul>
+                     <li role="presentation" class="active"><a href="#Men" aria-controls="Men" role="tab" data-toggle="tab">Men</a>
+                     </li>
+                     <li role="presentation"><a href="#Women" aria-controls="Women" role="tab" data-toggle="tab">Women</a>
+                     </li>
+                     <li role="presentation"><a href="#Children" aria-controls="Children" role="tab" data-toggle="tab">Children</a>
+                     </li>
+                  </ul>
+               </div>
+                <div class="tab-content category">
+                  <div id="Men" class="tab-pane fade in active">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item bg-pink">
+                           <div class="item-img">
+                              <img src="img/images/slider-1.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Cough</strong><br>& Cold</p>
+                           </div>
+                        </div>
+                        <div class="item bg-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-2.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Diabetes</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-l-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-3.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Heart</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-voilet">
+                           <div class="item-img">
+                              <img src="img/images/slider-4.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Dental</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-blue">
+                           <div class="item-img">
+                              <img src="img/images/slider-5.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Skin</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-green">
+                           <div class="item-img">
+                              <img src="img/images/slider-6.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Eye</strong> <br>Care</p>
+                           </div>
+                        </div>                  
+                    </div>
+                  </div>
+                  <!--<div id="Women" class="tab-pane fade">
+                    <!-- <p>Demo from <a href="https://owlcarousel2.github.io/OwlCarousel2/demos/basic.html">https://owlcarousel2.github.io/OwlCarousel2/demos/basic.html</a></p> 
+                    <div class="owl-carousel owl-theme">
+                        <div class="item bg-pink">
+                           <div class="item-img">
+                              <img src="img/images/slider-1.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Cough</strong><br>& Cold</p>
+                           </div>
+                        </div>
+                        <div class="item bg-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-2.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Diabetes</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-l-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-3.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Heart</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-voilet">
+                           <div class="item-img">
+                              <img src="img/images/slider-4.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Dental</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-blue">
+                           <div class="item-img">
+                              <img src="img/images/slider-5.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Skin</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-green">
+                           <div class="item-img">
+                              <img src="img/images/slider-6.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Eye</strong> <br>Care</p>
+                           </div>
+                        </div>                  
+                    </div>
+                  </div>
+                  <div id="Children" class="tab-pane fade">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item bg-pink">
+                           <div class="item-img">
+                              <img src="img/images/slider-1.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Cough</strong><br>& Cold</p>
+                           </div>
+                        </div>
+                        <div class="item bg-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-2.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Diabetes</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-l-org">
+                           <div class="item-img">
+                              <img src="img/images/slider-3.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Heart</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-voilet">
+                           <div class="item-img">
+                              <img src="img/images/slider-4.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Dental</strong><br> Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-blue">
+                           <div class="item-img">
+                              <img src="img/images/slider-5.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Skin</strong> <br>Care</p>
+                           </div>
+                        </div>
+                        <div class="item bg-green">
+                           <div class="item-img">
+                              <img src="img/images/slider-6.png" alt="slider-img">
+                           </div>
+                           <div class="slider-heading">
+                              <p><strong>Eye</strong> <br>Care</p>
+                           </div>
+                        </div>                  
+                    </div>
+                  </div>
+                --></div>
+            </div>
+          </div>
+      </section> 
+      <section class="specialists">
+         <div class="container">
+            <div class="row">
+               <div class="comman-heading">
+                  <h2>Choose by Specialists</h2>
+               </div>
+            </div>
+            <div class="row">
+            <div class="owl-carousel owl-theme" id="specialists">
+                 <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-2.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-2.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-3.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-1.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+            </div>
+         </div>
+         </div>
+      </section><br>
+      <section class="consultunt">
+         <div class="container">
+            <div class="row">
+               <div class="consultunt-inner">
+                  <h1>Meet Our Consultants Online</h1>
+                  <p>Video visits can address immediate medical issues or routine healthcare needs. Doctors are ready to treat a variety of issues or help you with prescriptions or referrals.</p>
+                  <div class="startVideo">
+                     <a href="javascript:void(0)" class="btn-bg startVideoBtn allBtn">Start Video Consultation</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section class="doctor">
+         <div class="container">
+            <div class="row">
+               <div class="comman-heading">
+                  <h2>Our Top Doctors</h2>
+               </div>
+            </div>
+            <div class="row">
+            <div class="owl-carousel owl-theme" id="doctor">
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-1.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn allBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-2.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-3.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="item-img">
+                     <img src="img/images/special-1.jpg" alt="special-img">
+                  </div>
+                  <div class="rating">
+                    <span class="icon-star-1"></span>
+                    <p>4.2</p>
+                  </div>
+                  <div class="sider-contain">
+                     <div class="slider-heading">
+                        <h2>Jordan Reich</h2>
+                        <p>General Physician</p>
+                        <h5>Dr. Jordan Reich, MBBS General Physician New York, NY</h5>
+                     </div>
+                     <a href="javascript:void(0)" class="appointmentBtn">Appointment</a>
+                  </div>
+                </div>
+            </div>
+         </div>
+         </div>
+      </section><br><br>
+      <section class="partner">
+         <div class="container">
+            <div class="row">
+               <div class="partnerBG">
+                  <h2>Be our Partners and <br> Expand your Client base</h2>
+                  <div class="learnBtn">
+                     <a href="javascript:void(0)" class="btn-bg nearmoreBtn">Learn More</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section class="testomonial">
+         <div class="container">
+            <div class="row">
+               <div class="comman-heading">
+                  <h2>What our patients say</h2>
+               </div>
+            </div>
+            <div class="row">
+               <div class="owl-carousel owl-theme" id="testomonial">
+                   <div class="item">
+                     <div class="testomonial-info">
+                        <div class="client-img">
+                           <img src="img/images/client-a.jpg" alt="client-a">
+                        </div>
+                        <div class="client-msg">
+                           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue turpis sollicitudin nulla finibus dignissim. Curabitur eu urna sed risus tempor venenatis. Morbi quis libero at odio elementum scelerisque at nec libero. Integer quis magna nunc. Sed malesuada efficitur tellus, a posuere risus finibus vitae.”</p>
+                           <h2>Mahyar Eidgah</h2>
+                           <span>New York, NY</span>
+                        </div>
+                     </div>
+                   </div>
+                   <div class="item">
+                     <div class="testomonial-info">
+                        <div class="client-img">
+                           <img src="img/images/client-b.jpg" alt="client-b">
+                        </div>
+                        <div class="client-msg">
+                           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue turpis sollicitudin nulla finibus dignissim. Curabitur eu urna sed risus tempor venenatis. Morbi quis libero at odio elementum scelerisque at nec libero. Integer quis magna nunc. Sed malesuada efficitur tellus, a posuere risus finibus vitae.”</p>
+                           <h2>Adjoa Duker</h2>
+                           <span>New York, NY</span>
+                        </div>
+                     </div>
+                   </div>
+                  <div class="item">
+                     <div class="testomonial-info">
+                        <div class="client-img">
+                           <img src="img/images/client-a.jpg" alt="client-a">
+                        </div>
+                        <div class="client-msg">
+                           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue turpis sollicitudin nulla finibus dignissim. Curabitur eu urna sed risus tempor venenatis. Morbi quis libero at odio elementum scelerisque at nec libero. Integer quis magna nunc. Sed malesuada efficitur tellus, a posuere risus finibus vitae.”</p>
+                           <h2>Mahyar Eidgah</h2>
+                           <span>New York, NY</span>
+                        </div>
+                     </div>
+                   </div>
+                   <div class="item">
+                     <div class="testomonial-info">
+                        <div class="client-img">
+                           <img src="img/images/client-b.jpg" alt="client-b">
+                        </div>
+                        <div class="client-msg">
+                           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue turpis sollicitudin nulla finibus dignissim. Curabitur eu urna sed risus tempor venenatis. Morbi quis libero at odio elementum scelerisque at nec libero. Integer quis magna nunc. Sed malesuada efficitur tellus, a posuere risus finibus vitae.”</p>
+                           <h2>Adjoa Duker</h2>
+                           <span>New York, NY</span>
+                        </div>
+                     </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section class="appStore">
+         <div class="container">
+            <div class="row">
+               <div class="appStoreBg clearfix">
+                  <div class="col-md-6 col-sm-6 col-sx-12">
+                     <div class="innerapp">
+                        <div class="doc-img">
+                           <img src="img/images/doct.png" alt="doct">
+                        </div>
+                        <div class="btn-Gropu">
+                           <a href="javascript:void(0)" class="appBTN">App Store</a>
+                           <a href="javascript:void(0)" class="appBTN">App Store</a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-sx-12">
+                     <div class="subscribe">
+                        <h1>Get along with us on</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue  turpis sollicitudin nulla finibus dignissim.</p>
+                        <div class="form-group relative">
+                           <input type="text" name="" class="form-control">
+                           <a href="javascript:void(0)" class="subscribeBtn">Subscribe</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section class="chat">
+         <div class="container">
+            <div class="row">
+               <div class="">
+                  <a href="javascript:void(0)">
+                     <span class="icon-chatbot"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span></span>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section class="footer">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-4 col-sm-4 col-sx-12">
+                  <div class="footer-inner">
+                     <h1>About us</h1>
+                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue turpis sollicitudin nulla finibus dignissim. Curabitur eu urna sed risus tempor venenatis. Morbi quis libero at odio elementum scelerisque at nec libero. Integer quis magna nunc. Sed malesuada efficitur tellus, a posuere risus finibus vitae. Aenean eleifend lacinia consectetur. Donec nec feugiat sem, vitae gravida felis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas consectetur orci vel felis lacinia scelerisque. Praesent ut sollicitudin enim. Etiam facilisis sagittis diam, id sollicitudin risus varius non. Proin eget semper ipsum.</p>
+                  </div>
+               </div>
+               <div class="col-md-2 col-sm-2 col-sx-12">
+                  <div class="footer-inner">
+                     <h1>Top Specialties</h1>
+                     <ul>
+                        <li>
+                           <a href="javascript:void(0)"> Primary Care Doctor</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Dermatologist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">OB-GYN Dentist </a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Psychiatrist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Ear, Nose & Throat Doctor</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Podiatrist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Urologist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Gastroenterologist</a>
+                        </li>
+                        <!--
+						<li>
+                           <a href="javascript:void(0)">Cardiologist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Neurologist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Orthopedic Surgeon </a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Ophthalmologist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Pediatrician</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Optometrist</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Eye Doctor</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Therapist Counselor</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Physical Therapist</a>
+                        <li>
+                           <a href="javascript:void(0)">Psychologist</a>
+                        </li>
+						-->
+                        <li>
+                           <a href="javascript:void(0)"> View all</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="col-md-3 col-sm-3 col-sx-12">
+                  <div class="footer-inner">
+                     <h1>Discover</h1>
+                     <ul>
+                        <li>
+                           <a href="javascript:void(0)">The Paper Gown</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Stories for and about patients</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">The Script</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Insights for doctors</a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Community Standards </a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">Data and privacy</a>
+                        <li>
+                           <a href="javascript:void(0)">Verified reviews</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="col-md-3 col-sm-3 col-sx-12">
+                  <div class="footer-inner">
+                     <h1>Are you a Doctor or Health Service?</h1>
+                     <p> List your practice on Zocdoc Become an API partner</p>
+                     <div class="helth-app">
+                        <h2>Get the Digi Healthcare App</h2>
+                        <a href="javascript:void(0)" class="appBtn">App Store</a>
+                        <a href="javascript:void(0)" class="appBtn">Google Play</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <div class="footer-bootm">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-4 col-sm-4 col-sx-12">
+                  <div class="logo">
+                     <a href="javascript:void(0)">
+                        <img src="img/images/heart.png"><span>Digi Healthcare</span></a>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-4 col-sx-12">
+                  <div class="copyRight">
+                     <p>All rights Reserved. Copyright @ 2020</p>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-4 col-sx-12">
+                  <div class="socia-media-footer">
+                     <ul>
+                        <li>
+                           <a href="javascript:void(0)">
+                              <span class="icon-facebook"><span class="path1"></span><span class="path2"></span></span>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)"><span class="icon-instagram"></span></a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">
+                              <span class="icon-linkedin"><span class="path1"></span><span class="path2"></span></span>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="javascript:void(0)">
+                              <span class="icon-twitter"><span class="path1"></span><span class="path2"></span></span>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <a href="#" id="scroll" style="display: block;"><span></span></a>
+            </div>
+
+         </div>
+      </div>
+       <!-- <script src="js/owl.carousel.min.js"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
+     
+      <script src="js/wow.js"></script>
+      <script src="js/custom.js"></script>
+      <!-- <script src="js/bootstrap.min.js"></script> -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script>
+         new WOW().init();
+      </script>
+</body>
+ </html>
